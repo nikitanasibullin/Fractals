@@ -4,47 +4,47 @@
 #include <complex>
 #define MaxIterationsIndex 1000
 
-// Глобальные переменные для хранения текущих границ фрактала
+// ГѓГ«Г®ГЎГ Г«ГјГ­Г»ГҐ ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ Г¤Г«Гї ГµГ°Г Г­ГҐГ­ГЁГї ГІГҐГЄГіГ№ГЁГµ ГЈГ°Г Г­ГЁГ¶ ГґГ°Г ГЄГІГ Г«Г 
 double minx = -2.0, maxx = 2.0, miny = -2.0, maxy = 2.0;
 
-// Параметр c для фрактала Жюлиа
+// ГЏГ Г°Г Г¬ГҐГІГ° c Г¤Г«Гї ГґГ°Г ГЄГІГ Г«Г  Г†ГѕГ«ГЁГ 
 std::complex<double> c(-0.7, 0.27015);
 
-// Прототипы функций
+// ГЏГ°Г®ГІГ®ГІГЁГЇГ» ГґГіГ­ГЄГ¶ГЁГ©
 void DrawStudyExample(HWND hWnd);
 void Julia(HDC hdc, int xx, int yy, int cx, int cy, double minx, double maxx, double miny, double maxy);
 int Iterations(double x, double y);
 COLORREF IndexToColor(int index);
 
-// Обработчик сообщений
+// ГЋГЎГ°Г ГЎГ®ГІГ·ГЁГЄ Г±Г®Г®ГЎГ№ГҐГ­ГЁГ©
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
     case WM_LBUTTONDOWN: {
-        // Получаем координаты курсора
+        // ГЏГ®Г«ГіГ·Г ГҐГ¬ ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ» ГЄГіГ°Г±Г®Г°Г 
         int x = LOWORD(lParam);
         int y = HIWORD(lParam);
 
-        // Получаем размеры клиентской области окна
+        // ГЏГ®Г«ГіГ·Г ГҐГ¬ Г°Г Г§Г¬ГҐГ°Г» ГЄГ«ГЁГҐГ­ГІГ±ГЄГ®Г© Г®ГЎГ«Г Г±ГІГЁ Г®ГЄГ­Г 
         RECT rc;
         GetClientRect(hWnd, &rc);
         double width = maxx - minx;
         double height = maxy - miny;
 
-        // Пересчитываем новые границы фрактала
-        double newWidth = width / 4; // Уменьшаем ширину области в 4 раза
-        double newHeight = height / 4; // Уменьшаем высоту области в 4 раза
+        // ГЏГҐГ°ГҐГ±Г·ГЁГІГ»ГўГ ГҐГ¬ Г­Г®ГўГ»ГҐ ГЈГ°Г Г­ГЁГ¶Г» ГґГ°Г ГЄГІГ Г«Г 
+        double newWidth = width / 4; // Г“Г¬ГҐГ­ГјГёГ ГҐГ¬ ГёГЁГ°ГЁГ­Гі Г®ГЎГ«Г Г±ГІГЁ Гў 4 Г°Г Г§Г 
+        double newHeight = height / 4; // Г“Г¬ГҐГ­ГјГёГ ГҐГ¬ ГўГ»Г±Г®ГІГі Г®ГЎГ«Г Г±ГІГЁ Гў 4 Г°Г Г§Г 
 
-        // Преобразуем координаты мыши в координаты фрактала
+        // ГЏГ°ГҐГ®ГЎГ°Г Г§ГіГҐГ¬ ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ» Г¬Г»ГёГЁ Гў ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ» ГґГ°Г ГЄГІГ Г«Г 
         double fractalX = minx + (x / (double)rc.right) * width;
         double fractalY = miny + (y / (double)rc.bottom) * height;
 
-        // Устанавливаем новые границы вокруг точки клика
+        // Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ Г­Г®ГўГ»ГҐ ГЈГ°Г Г­ГЁГ¶Г» ГўГ®ГЄГ°ГіГЈ ГІГ®Г·ГЄГЁ ГЄГ«ГЁГЄГ 
         minx = fractalX - newWidth / 2;
         maxx = fractalX + newWidth / 2;
         miny = fractalY - newHeight / 2;
         maxy = fractalY + newHeight / 2;
 
-        // Перерисовываем фрактал
+        // ГЏГҐГ°ГҐГ°ГЁГ±Г®ГўГ»ГўГ ГҐГ¬ ГґГ°Г ГЄГІГ Г«
         InvalidateRect(hWnd, NULL, TRUE);
         break;
     }
@@ -69,9 +69,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd, 
     HWND hWnd;
     WNDCLASS WndClass;
 
-    //---сначала регистрируем класс главного окна программы---
+    //---Г±Г­Г Г·Г Г«Г  Г°ГҐГЈГЁГ±ГІГ°ГЁГ°ГіГҐГ¬ ГЄГ«Г Г±Г± ГЈГ«Г ГўГ­Г®ГЈГ® Г®ГЄГ­Г  ГЇГ°Г®ГЈГ°Г Г¬Г¬Г»---
     WndClass.style = NULL;
-    WndClass.lpfnWndProc = WndProc; //адрес функции окна
+    WndClass.lpfnWndProc = WndProc; //Г Г¤Г°ГҐГ± ГґГіГ­ГЄГ¶ГЁГЁ Г®ГЄГ­Г 
     WndClass.cbClsExtra = 0;
     WndClass.cbWndExtra = 0;
     WndClass.hInstance = hInstance;
@@ -82,13 +82,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd, 
     WndClass.lpszClassName = TEXT("StudEx");
     if (!RegisterClass(&WndClass)) return 0;
 
-    // Создаем окно класса StudEx+
+    // Г‘Г®Г§Г¤Г ГҐГ¬ Г®ГЄГ­Г® ГЄГ«Г Г±Г±Г  StudEx+
     hWnd = CreateWindow(TEXT("StudEx"),
-        TEXT("Фрактал Жюлиа"), // заголовок
-        WS_OVERLAPPEDWINDOW, // стиль окна
+        TEXT("Г”Г°Г ГЄГІГ Г« Г†ГѕГ«ГЁГ "), // Г§Г ГЈГ®Г«Г®ГўГ®ГЄ
+        WS_OVERLAPPEDWINDOW, // Г±ГІГЁГ«Гј Г®ГЄГ­Г 
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        800, // размеры окна
+        800, // Г°Г Г§Г¬ГҐГ°Г» Г®ГЄГ­Г 
         800,
         NULL,
         NULL,
@@ -100,7 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd, 
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
 
-    //----- организация цикла обработки сообщений -
+    //----- Г®Г°ГЈГ Г­ГЁГ§Г Г¶ГЁГї Г¶ГЁГЄГ«Г  Г®ГЎГ°Г ГЎГ®ГІГЄГЁ Г±Г®Г®ГЎГ№ГҐГ­ГЁГ© -
     while (GetMessage(&msg, NULL, NULL, NULL)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
@@ -145,8 +145,8 @@ int Iterations(double x, double y) {
     yy = y;
     i = 0;
     while (xx * xx + yy * yy <= 4.0) {
-        xk = xx * xx - yy * yy + c.real(); // Используем параметр c
-        yk = 2.0 * xx * yy + c.imag(); // Используем параметр c
+        xk = xx * xx - yy * yy + c.real(); // Г€Г±ГЇГ®Г«ГјГ§ГіГҐГ¬ ГЇГ Г°Г Г¬ГҐГІГ° c
+        yk = 2.0 * xx * yy + c.imag(); // Г€Г±ГЇГ®Г«ГјГ§ГіГҐГ¬ ГЇГ Г°Г Г¬ГҐГІГ° c
         xx = xk;
         yy = yk;
         i++;
@@ -157,21 +157,21 @@ int Iterations(double x, double y) {
 
 COLORREF IndexToColor(int index) {
     if (index == MaxIterationsIndex) {
-        return RGB(0, 0, 0); // Черный цвет для точек, которые не выходят за границы
+        return RGB(0, 0, 0); // Г—ГҐГ°Г­Г»Г© Г¶ГўГҐГІ Г¤Г«Гї ГІГ®Г·ГҐГЄ, ГЄГ®ГІГ®Г°Г»ГҐ Г­ГҐ ГўГ»ГµГ®Г¤ГїГІ Г§Г  ГЈГ°Г Г­ГЁГ¶Г»
     }
 
-    // Нормализуем индекс к диапазону от 0 до 255
+    // ГЌГ®Г°Г¬Г Г«ГЁГ§ГіГҐГ¬ ГЁГ­Г¤ГҐГЄГ± ГЄ Г¤ГЁГ ГЇГ Г§Г®Г­Гі Г®ГІ 0 Г¤Г® 255
     int normalizedIndex = (index * 255) / MaxIterationsIndex;
 
-    // Определяем цвет звезды
-    int r = static_cast<int>(normalizedIndex * 0.5); // Уменьшаем красный компонент для фиолетового
-    int g = static_cast<int>(normalizedIndex * 0.0); // Зеленый компонент, чтобы избежать зеленого
-    int b = normalizedIndex; // Синий компонент для голубого
+    // ГЋГЇГ°ГҐГ¤ГҐГ«ГїГҐГ¬ Г¶ГўГҐГІ Г§ГўГҐГ§Г¤Г»
+    int r = static_cast<int>(normalizedIndex * 0.5); // Г“Г¬ГҐГ­ГјГёГ ГҐГ¬ ГЄГ°Г Г±Г­Г»Г© ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІ Г¤Г«Гї ГґГЁГ®Г«ГҐГІГ®ГўГ®ГЈГ®
+    int g = static_cast<int>(normalizedIndex * 0.0); // Г‡ГҐГ«ГҐГ­Г»Г© ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІ, Г·ГІГ®ГЎГ» ГЁГ§ГЎГҐГ¦Г ГІГј Г§ГҐГ«ГҐГ­Г®ГЈГ®
+    int b = normalizedIndex; // Г‘ГЁГ­ГЁГ© ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІ Г¤Г«Гї ГЈГ®Г«ГіГЎГ®ГЈГ®
 
-    // Если яркость слишком низкая, создаем более тусклый фиолетовый
+    // Г…Г±Г«ГЁ ГїГ°ГЄГ®Г±ГІГј Г±Г«ГЁГёГЄГ®Г¬ Г­ГЁГ§ГЄГ Гї, Г±Г®Г§Г¤Г ГҐГ¬ ГЎГ®Г«ГҐГҐ ГІГіГ±ГЄГ«Г»Г© ГґГЁГ®Г«ГҐГІГ®ГўГ»Г©
     if (normalizedIndex < 50) {
-        return RGB(25, 0, 25); // Тусклый фиолетовый для слабых звезд
+        return RGB(25, 0, 25); // Г’ГіГ±ГЄГ«Г»Г© ГґГЁГ®Г«ГҐГІГ®ГўГ»Г© Г¤Г«Гї Г±Г«Г ГЎГ»Гµ Г§ГўГҐГ§Г¤
     }
 
-    return RGB(r, g, b); // Возвращаем цвет звезды
+    return RGB(r, g, b); // Г‚Г®Г§ГўГ°Г Г№Г ГҐГ¬ Г¶ГўГҐГІ Г§ГўГҐГ§Г¤Г»
 }
